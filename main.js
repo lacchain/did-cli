@@ -1,0 +1,43 @@
+import inquirer from "inquirer";
+import list from "./list.js";
+import create from "./create.js";
+import resolve from "./resolve.js";
+import { init } from "./storage.js";
+
+const ui = new inquirer.ui.BottomBar( { bottomBar: '' } );
+
+init();
+
+const main = async () => inquirer.prompt( [{
+  type: 'list',
+  name: 'option',
+  message: 'What do you want to do?',
+  choices: [
+    'List (View all DIDs)',
+    'Create (Generate new DID)',
+    'Resolve (Resolve DID Document)',
+    new inquirer.Separator(),
+    'Import (Import single or multiple DIDs)',
+    'Export (Export encrypted DIDs)',
+    new inquirer.Separator(),
+    '<Exit>',
+    new inquirer.Separator(),
+  ],
+}] ).then( async ( { option } ) => {
+  switch( option ) {
+    case 'List (View all DIDs)':
+      await list(ui);
+      break;
+    case 'Create (Generate new DID)':
+      await create(ui);
+      break;
+    case 'Resolve (Resolve DID Document)':
+      await resolve(ui);
+      break;
+    case '<Exit>':
+      process.exit(0);
+      break;
+  }
+} );
+
+main();
