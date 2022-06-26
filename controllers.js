@@ -23,7 +23,7 @@ export default async function(ui, did) {
     const { option } = await inquirer.prompt( [{
       type: 'list',
       name: 'option',
-      message: `${did.id}@controller:${controller}`,
+      message: `${did.id}@${controller}`,
       choices: [
           'Set as Default',
           'Revoke Controller'
@@ -48,7 +48,7 @@ export default async function(ui, did) {
     await inquirer.prompt( [{
       type: 'list',
       name: 'option',
-      message: `${did.id}@controllers`,
+      message: `${did.id}@${controller}}`,
       choices: [
         'Go back'
       ]
