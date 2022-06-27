@@ -19,12 +19,19 @@ First, install [Node.js](http://nodejs.org/) and [npm](https://npmjs.com/).
 Then, install the LACChain DID CLI running:
 
 ```sh
-npm install --global @lacchain/did-cli
+git clone https://github.com/lacchain/did-cli
+cd did-cli
+nvm install
+yarn install
 ```
 
 ## Usage
 
 Just execute the following command and you will get a interactive console to choose options:
+
+```sh
+npm start
+```
 
 ## License
 
