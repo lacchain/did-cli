@@ -38,10 +38,14 @@ export async function listVM( ui, did ) {
       ...document.authentication.map( vm => `${vm.id} (authentication)` ),
       ...document.keyAgreement.map( vm => `${vm.id} (keyAgreement)` ),
       ...document.capabilityInvocation.map( vm => `${vm.id} (capabilityInvocation)` ),
-      ...document.capabilityDelegation.map( vm => `${vm.id} (capabilityDelegation)` )
+      ...document.capabilityDelegation.map( vm => `${vm.id} (capabilityDelegation)` ),
+      new inquirer.Separator(),
+      'Go Back',
     ],
     pageSize: 10
   }] );
+
+  if( verificationMethod === 'Go Back' ) return await view( ui, did.id );
 
   const selectedVM = document.verificationMethod.find( vm => verificationMethod.startsWith( vm.id ) );
   const relationship = verificationMethod.split( ' ' )[1].replace( '(', '' ).replace( ')', '' );
@@ -81,7 +85,7 @@ export async function listVM( ui, did ) {
     }]);
   }
 
-  await view( ui, did.id );
+  await listVM( ui, did );
 }
 
 export async function createVM( ui, did ) {
@@ -227,5 +231,5 @@ export async function createVM( ui, did ) {
     pressToContinueMessage: 'Press a key to continue...',
   }]);
 
-  await view( ui, did.id );
+  await listVM( ui, did );
 }

@@ -2,7 +2,7 @@ import inquirer from "inquirer";
 import config from "./config.js";
 import { DID } from "@lacchain/did";
 import { get } from "./storage.js";
-import controllers from "./controllers.js";
+import { listControllers, registerController } from "./controllers.js";
 import { createVM, listVM } from "./verificationMethods.js";
 
 async function getFullDID( did ){
@@ -37,7 +37,7 @@ export default async function(ui, did) {
   }] );
   switch( option ){
     case 'View Controllers':
-      await controllers(ui, _did);
+      await listControllers(ui, _did);
       break;
     case 'View Verification Methods':
       await listVM( ui, _did );
@@ -45,6 +45,9 @@ export default async function(ui, did) {
     case 'View Services':
       const services = document.service || [];
       console.log( services );
+      break;
+    case 'Add Controller':
+      await registerController( ui, _did );
       break;
     case 'Add Verification Method':
       await createVM( ui, _did );
