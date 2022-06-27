@@ -50,6 +50,7 @@ async function generateBootstrapDID( ui ) {
     algorithm: 'x25519ka',
     encoding: 'hex',
     publicKey: `0x${encryptionKeyPair.publicKey}`,
+    privateKey: encryptionKeyPair.privateKey,
     controller: did.address,
   };
   await did.addKeyAgreement( keyAgreement );
