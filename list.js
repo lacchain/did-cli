@@ -17,7 +17,6 @@ export default async function(ui) {
   }] );
   if( did === 'Create DID' ) {
     console.clear();
-    await parent();
   } else {
     await view( ui, did );
   }

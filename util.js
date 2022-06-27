@@ -1,6 +1,13 @@
 import crypto from "crypto";
 import bs58 from "bs58";
 
+export const types = {
+  'Zero-Knowledge Proof (BBS+)': 'zkp',
+  'Ethereum (SECP256K1)': 'eth',
+  'X.509 (RSA)': 'x509',
+  'Encryption (NaCl)': 'enc'
+}
+
 export const keyAlgorithms = {
   'JsonWebKey2020': 'jwk',
   'EcdsaSecp256k1VerificationKey2019': 'esecp256k1vk',
@@ -12,7 +19,7 @@ export const keyAlgorithms = {
   'SchnorrSecp256k1VerificationKey2019': 'ssecp256k1vk'
 }
 
-const types = {
+export const relationships = {
   assertionMethod: 'asse',
   authentication: 'auth',
   keyAgreement: 'keya',
@@ -20,13 +27,20 @@ const types = {
   capabilityInvocation: 'invo'
 };
 
-export function getVMId( vm ) {
-  return crypto.createHash( 'sha256' ).update( `${vm.type}/${vm.controller}/${vm.algorithm}/${vm.encoding}/${vm.publicKey}` ).digest( 'hex' );
+export const encodings = {
+  'Hexadecimal': 'hex',
+  'Base 64': 'base64',
+  'Base 58': 'base58',
+  'PEM': 'pem'
 }
 
-export function getVerificationMethod( vm, purpose ) {
+export function getVMId( vm, relationship ) {
+  return crypto.createHash( 'sha256' ).update( `${vm.type}/${vm.controller}/${vm.algorithm}/${vm.encoding}/${relationship}/${vm.publicKey}` ).digest( 'hex' );
+}
+
+export function getRawVerificationMethod( vm, relationship ) {
   const verificationMethod = {
-    type: types[purpose] || 'vm',
+    type: relationships[relationship] || 'vm',
     algorithm: `${keyAlgorithms[vm.type]}`,
     controller: vm.controller
   }

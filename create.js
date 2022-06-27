@@ -1,9 +1,12 @@
 import inquirer from "inquirer";
+import message from "bit-message-box";
 import { DID } from "@lacchain/did";
 import config from "./config.js";
 import { set } from "./storage.js";
 import { createKeyPair } from "@lacchain/did/lib/utils.js";
 import DIDComm from "DIDComm-js";
+
+import view from "./view.js";
 
 export const generateEncryptionKeyPair = async() => {
   const didcomm = new DIDComm.DIDComm();
@@ -15,29 +18,40 @@ export const generateEncryptionKeyPair = async() => {
   }
 }
 
-async function generateEmptyDID() {
+async function generateEmptyDID( ui ) {
   const did = new DID({ ...config });
   const controllers = [{
     address: did.address,
     privateKey: did.config.controllerPrivateKey,
   }];
-  console.log( `DID: ${did.id}` );
-  console.log( `Controller Address: ${controllers[0].address}` );
-  console.log( `Controller Private Key: ${controllers[0].privateKey}` );
-  set( did.id,{ controllers, created: new Date(), updated: new Date() } )
+  message.info( `DID: ${did.id}
+Controller Address: ${controllers[0].address}
+Controller Private Key: ${controllers[0].privateKey}` );
+  set( did.id,{ controllers, verificationMethods: [], created: new Date(), updated: new Date() } )
+
+  await inquirer.prompt([{
+    name: 'key',
+    type: 'press-to-continue',
+    anyKey: true,
+    pressToContinueMessage: 'Press a key to continue...',
+  }]);
+
+  await view( ui, did.id );
 }
 
-async function generateBootstrapDID(ui) {
+async function generateBootstrapDID( ui ) {
   const did = new DID({ ...config });
   const encryptionKeyPair = await generateEncryptionKeyPair();
   const controllerKeyPair = createKeyPair();
   await did.addController( controllerKeyPair.address );
-  await did.addKeyAgreement( {
+  const keyAgreement = {
+    relationship: 'keya',
     algorithm: 'x25519ka',
     encoding: 'hex',
     publicKey: `0x${encryptionKeyPair.publicKey}`,
     controller: did.address,
-  } );
+  };
+  await did.addKeyAgreement( keyAgreement );
   await did.changeController( controllerKeyPair.address );
   const controllers = [{
     address: did.address,
@@ -46,15 +60,24 @@ async function generateBootstrapDID(ui) {
     address: controllerKeyPair.address,
     privateKey: controllerKeyPair.privateKey,
   }];
-  console.log( `DID: ${did.id}` );
-  console.log( `Controller Address: ${controllers[1].address}` );
-  console.log( `Controller Private Key: ${controllers[1].privateKey}` );
-  console.log( `Encryption Public Key: ${encryptionKeyPair.publicKey}` );
-  console.log( `Encryption Private Key: 0x${encryptionKeyPair.privateKey}` );
-  set( did.id,{ controllers, created: new Date(), updated: new Date() } )
+  message.info( `DID: ${did.id}
+Controller Address: ${controllers[1].address}
+Controller Private Key: ${controllers[1].privateKey}
+Encryption Public Key: ${encryptionKeyPair.publicKey}
+Encryption Private Key: 0x${encryptionKeyPair.privateKey}` );
+  set( did.id,{ controllers, verificationMethods: [keyAgreement], created: new Date(), updated: new Date() } )
+
+  await inquirer.prompt([{
+    name: 'key',
+    type: 'press-to-continue',
+    anyKey: true,
+    pressToContinueMessage: 'Press a key to continue...',
+  }]);
+
+  await view( ui, did.id );
 }
 
-export default async function(ui) {
+export default async function( ui ) {
   const { option } = await inquirer.prompt( [{
     type: 'list',
     name: 'option',
@@ -68,10 +91,10 @@ export default async function(ui) {
   }] );
   switch( option ){
     case 'Generate empty DID':
-      await generateEmptyDID();
+      await generateEmptyDID( ui );
       break;
     case 'Generate bootstrap DID':
-      await generateBootstrapDID();
+      await generateBootstrapDID( ui );
       break;
   }
 }

@@ -3,7 +3,7 @@ import config from "./config.js";
 import { DID } from "@lacchain/did";
 import { get } from "./storage.js";
 import controllers from "./controllers.js";
-import verificationMethods from "./verificationMethods.js";
+import { createVM, listVM } from "./verificationMethods.js";
 
 async function getFullDID( did ){
   const address = did.split(':').slice(-1)[0];
@@ -40,11 +40,14 @@ export default async function(ui, did) {
       await controllers(ui, _did);
       break;
     case 'View Verification Methods':
-      await verificationMethods( ui, _did );
+      await listVM( ui, _did );
       break;
     case 'View Services':
       const services = document.service || [];
       console.log( services );
+      break;
+    case 'Add Verification Method':
+      await createVM( ui, _did );
       break;
 
   }

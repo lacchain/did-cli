@@ -1,8 +1,13 @@
 import inquirer from "inquirer";
+import PressToContinuePrompt from 'inquirer-press-to-continue';
+import inquirerPrompt from "./autocomplete.js";
 import list from "./list.js";
 import create from "./create.js";
 import resolve from "./resolve.js";
 import { init } from "./storage.js";
+
+inquirer.registerPrompt('press-to-continue', PressToContinuePrompt);
+inquirer.registerPrompt('autocomplete', inquirerPrompt);
 
 const ui = new inquirer.ui.BottomBar( { bottomBar: '' } );
 

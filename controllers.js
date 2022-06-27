@@ -1,6 +1,7 @@
 import inquirer from "inquirer"
 import { get, set } from "./storage.js";
 import view from "./view.js";
+import message from "bit-message-box";
 
 export default async function(ui, did) {
   const controllers = await did.getControllers();
@@ -14,46 +15,46 @@ export default async function(ui, did) {
       if(address.toLowerCase() === currentController.toLowerCase())
         return `* ${address}`;
       return address;
-    } )
+    } ),
+    filter: value => ({
+      address: value.replace('* ', '').toLowerCase(),
+      isCurrent: value.startsWith("*")
+    })
   }] );
-  const storedController = storedDID.controllers.find( c => controller.toLowerCase().endsWith( c.address.toLowerCase() ) )
-  if( storedController && !controller.startsWith("*") ){
-    console.log( `Controller: ${controller}` );
-    console.log( `Private Key: ${storedController.privateKey}` );
+  const storedController = storedDID.controllers.find( c => controller.address.endsWith( c.address.toLowerCase() ) )
+  message.info( `Controller: ${controller.address}${storedController ? `\nPrivate Key: ${storedController.privateKey}` : ''}
+Current Active: ${controller.isCurrent}` );
+  if( storedController && !controller.isCurrent ){
     const { option } = await inquirer.prompt( [{
       type: 'list',
       name: 'option',
-      message: `${did.id}@${controller}`,
+      message: `${did.id}@${controller.address}`,
       choices: [
           'Set as Default',
           'Revoke Controller'
       ]
     }] );
     if( option === 'Set as Default' ){
-      const tx = await did.changeController( controller );
-      console.log(tx.transactionHash);
+      const tx = await did.changeController( controller.address );
+      message.info(`Tx Hash: ${tx.transactionHash}`);
     } else if( option === 'Revoke Controller' ){
-      if( controller.toLowerCase().endsWith(currentController.toLowerCase()) ){
-        console.log('Unable to revoke current controller. First, add or change main controller');
+      if( controller.address.endsWith(currentController.toLowerCase()) ){
+        message.error('Unable to revoke current controller. First, add or change main controller');
       } else {
-        const tx = await did.removeController( controller );
+        const tx = await did.removeController( controller.address );
         storedDID.controller = storedDID.controllers.filter( c => c.address !== storedController.address );
         set( did.id, storedDID );
-        console.log(tx.transactionHash);
+        message.info(`Tx Hash: ${tx.transactionHash}`);
       }
     }
-  } else {
-    console.log( `Controller: ${controller}` );
-    if( storedController ) console.log( `Private Key: ${storedController.privateKey}` );
-    await inquirer.prompt( [{
-      type: 'list',
-      name: 'option',
-      message: `${did.id}@${controller}}`,
-      choices: [
-        'Go back'
-      ]
-    }] );
   }
+
+  await inquirer.prompt([{
+    name: 'key',
+    type: 'press-to-continue',
+    anyKey: true,
+    pressToContinueMessage: 'Press a key to continue...',
+  }]);
 
   await view( ui, did.id );
 }

@@ -6,12 +6,20 @@
 		"start": "NODE_NO_WARNINGS=1 node --experimental-modules --experimental-json-modules main.js"
 	},
 	"dependencies": {
-		"@lacchain/did": "^1.3.1",
-		"bs58": "^4.0.1",
+		"@lacchain/did": "^1.4.0",
+		"@mattrglobal/jsonld-signatures-bbs": "0.10.0",
 		"DIDComm-js": "git+https://github.com/decentralized-identity/DIDComm-js.git",
+		"ansi-escapes": "^5.0.0",
+		"bit-message-box": "^1.1.0",
+		"bs58": "^4.0.1",
 		"encrypt-storage": "^2.2.10",
+		"figures": "^4.0.1",
 		"inquirer": "^9.0.0",
+		"inquirer-press-to-continue": "^1.1.4",
 		"keyv": "^4.3.2",
-		"keyv-file": "^0.2.0"
+		"keyv-file": "^0.2.0",
+		"picocolors": "^1.0.0",
+		"run-async": "^2.4.1",
+		"rxjs": "^7.5.5"
 	}
 }
