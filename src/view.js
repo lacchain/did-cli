@@ -4,9 +4,11 @@ import { DID } from "@lacchain/did";
 import { get } from "./storage.js";
 import { listControllers, registerController } from "./controllers.js";
 import { createVM, listVM } from "./verificationMethods.js";
+import { listServices, registerService } from "./services.js";
+import message from "bit-message-box";
 
 async function getFullDID( did ){
-  const address = did.split(':').slice(-1)[0];
+  const address = did.split( ':' ).slice( -1 )[0];
   const readOnlyDID = new DID( { ...config, address } );
   const currentController = await readOnlyDID.getController();
   const storedDID = await get(readOnlyDID.id);
@@ -35,7 +37,7 @@ export default async function(ui, did) {
       new inquirer.Separator(),
     ]
   }] );
-  switch( option ){
+  switch( option ) {
     case 'View Controllers':
       await listControllers(ui, _did);
       break;
@@ -43,8 +45,7 @@ export default async function(ui, did) {
       await listVM( ui, _did );
       break;
     case 'View Services':
-      const services = document.service || [];
-      console.log( services );
+      await listServices( ui, _did );
       break;
     case 'Add Controller':
       await registerController( ui, _did );
@@ -52,6 +53,11 @@ export default async function(ui, did) {
     case 'Add Verification Method':
       await createVM( ui, _did );
       break;
-
+    case 'Add Service':
+      await registerService( ui, _did );
+      break;
+    case 'Resolve Document':
+      message.info( JSON.stringify( await _did.getDocument(), null, 2 ) );
+      break;
   }
 }

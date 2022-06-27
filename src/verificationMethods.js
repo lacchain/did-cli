@@ -19,7 +19,7 @@ export async function listVM( ui, did ) {
   const storedDID = await get( did.id );
 
   if( document.verificationMethod.length <= 0 ){
-    message.warn( "There is no Verification Method registered yet" );
+    message.warn( "There is no Verification Methods registered yet" );
     await inquirer.prompt([{
       name: 'key',
       type: 'press-to-continue',

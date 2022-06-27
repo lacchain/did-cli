@@ -13,7 +13,7 @@ const ui = new inquirer.ui.BottomBar( { bottomBar: '' } );
 
 init();
 
-const main = async () => inquirer.prompt( [{
+export const main = async () => inquirer.prompt( [{
   type: 'list',
   name: 'option',
   message: 'What do you want to do?',
@@ -21,9 +21,6 @@ const main = async () => inquirer.prompt( [{
     'List (View all DIDs)',
     'Create (Generate new DID)',
     'Resolve (Resolve DID Document)',
-    new inquirer.Separator(),
-    'Import (Import single or multiple DIDs)',
-    'Export (Export encrypted DIDs)',
     new inquirer.Separator(),
     '<Exit>',
     new inquirer.Separator(),

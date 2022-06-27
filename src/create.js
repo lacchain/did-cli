@@ -7,6 +7,7 @@ import { createKeyPair } from "@lacchain/did/lib/utils.js";
 import DIDComm from "DIDComm-js";
 
 import view from "./view.js";
+import { main } from "./main.js";
 
 export const generateEncryptionKeyPair = async() => {
   const didcomm = new DIDComm.DIDComm();
@@ -86,7 +87,7 @@ export default async function( ui ) {
       'Generate empty DID',
       'Generate bootstrap DID',
       new inquirer.Separator(),
-      '<Go back>'
+      'Go Back'
     ],
   }] );
   switch( option ){
@@ -97,4 +98,5 @@ export default async function( ui ) {
       await generateBootstrapDID( ui );
       break;
   }
+  await main();
 }
