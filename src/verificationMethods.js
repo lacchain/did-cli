@@ -56,9 +56,9 @@ export async function listVM( ui, did ) {
     print += `\n${key}: ${selectedVM[key]}`
   }
 
-  const storedIndex = storedDID.verificationMethods?.findIndex( vm => getVMId(vm, vm.relationship) === getVMId(verificationMethod, relationship) )
+  const storedIndex = storedDID.verificationMethods?.findIndex( vm => getVMId(vm) === getVMId(rawVM) )
   const storedVM = storedDID.verificationMethods?.splice( storedIndex, 1 )[0];
-  if( storedIndex ) print += `\nprivateKey: ${storedVM.privateKey}`;
+  if( storedIndex >= 0 ) print += `\nprivateKey: ${storedVM.privateKey}`;
 
   message.info( print );
 
@@ -144,6 +144,7 @@ export async function createVM( ui, did ) {
   }, {
     type: 'input',
     name: 'expires',
+    default: 3600,
     message: 'Expiration (seconds)',
     validate(value) {
       const valid = !isNaN(parseFloat(value));
@@ -173,7 +174,7 @@ export async function createVM( ui, did ) {
         return {
           algorithm: 'esecp256k1vk',
           encoding: 'blockchain',
-          publicKey: `0x${kp.address}`,
+          publicKey: kp.address,
           privateKey: kp.privateKey
         }
       },

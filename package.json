@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
-		"start": "NODE_NO_WARNINGS=1 node --experimental-modules --experimental-json-modules src/main.js"
+		"start": "node --experimental-modules --experimental-json-modules src/main.js"
 	},
 	"dependencies": {
 		"@lacchain/did": "^1.4.2",
@@ -12,12 +12,14 @@
 		"ansi-escapes": "^5.0.0",
 		"bit-message-box": "^1.1.0",
 		"bs58": "^4.0.1",
+		"did-jwt": "^5.5.0",
 		"encrypt-storage": "^2.2.10",
 		"figures": "^4.0.1",
 		"inquirer": "^9.0.0",
 		"inquirer-press-to-continue": "^1.1.4",
 		"keyv": "^4.3.2",
 		"keyv-file": "^0.2.0",
+		"moment": "^2.29.3",
 		"picocolors": "^1.0.0",
 		"run-async": "^2.4.1",
 		"rxjs": "^7.5.5"

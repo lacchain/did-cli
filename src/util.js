@@ -34,8 +34,8 @@ export const encodings = {
   'PEM': 'pem'
 }
 
-export function getVMId( vm, relationship ) {
-  return crypto.createHash( 'sha256' ).update( `${vm.type}/${vm.controller}/${vm.algorithm}/${vm.encoding}/${relationship}/${vm.publicKey}` ).digest( 'hex' );
+export function getVMId( vm ) {
+  return crypto.createHash( 'sha256' ).update( `${vm.relationship || vm.type}/${vm.controller}/${vm.algorithm}/${vm.encoding}/${vm.publicKey}` ).digest( 'hex' );
 }
 
 export function getRawVerificationMethod( vm, relationship ) {
@@ -43,6 +43,10 @@ export function getRawVerificationMethod( vm, relationship ) {
     type: relationships[relationship] || 'vm',
     algorithm: `${keyAlgorithms[vm.type]}`,
     controller: vm.controller
+  }
+  if( vm.blockchainAccountId ){
+    verificationMethod.encoding = 'blockchain';
+    verificationMethod.publicKey = vm.blockchainAccountId;
   }
   if( vm.publicKeyHex ){
     verificationMethod.encoding = 'hex';

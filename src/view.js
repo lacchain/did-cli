@@ -6,8 +6,9 @@ import { listControllers, registerController } from "./controllers.js";
 import { createVM, listVM } from "./verificationMethods.js";
 import { listServices, registerService } from "./services.js";
 import message from "bit-message-box";
+import list from "./list.js";
 
-async function getFullDID( did ){
+export async function getFullDID( did ){
   const address = did.split( ':' ).slice( -1 )[0];
   const readOnlyDID = new DID( { ...config, address } );
   const currentController = await readOnlyDID.getController();
@@ -35,6 +36,8 @@ export default async function(ui, did) {
       new inquirer.Separator(),
       'Resolve Document',
       new inquirer.Separator(),
+      'Go Back',
+      new inquirer.Separator(),
     ]
   }] );
   switch( option ) {
@@ -58,6 +61,9 @@ export default async function(ui, did) {
       break;
     case 'Resolve Document':
       message.info( JSON.stringify( await _did.getDocument(), null, 2 ) );
+      break;
+    case 'Go Back':
+      await list(ui);
       break;
   }
 }

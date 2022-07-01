@@ -5,6 +5,7 @@ import list from "./list.js";
 import create from "./create.js";
 import resolve from "./resolve.js";
 import { init } from "./storage.js";
+import { generateToken } from "./authentication.js";
 
 inquirer.registerPrompt('press-to-continue', PressToContinuePrompt);
 inquirer.registerPrompt('autocomplete', inquirerPrompt);
@@ -22,6 +23,8 @@ export const main = async () => inquirer.prompt( [{
     'Create (Generate new DID)',
     'Resolve (Resolve DID Document)',
     new inquirer.Separator(),
+    'Authentication Token',
+    new inquirer.Separator(),
     '<Exit>',
     new inquirer.Separator(),
   ],
@@ -35,6 +38,9 @@ export const main = async () => inquirer.prompt( [{
       break;
     case 'Resolve (Resolve DID Document)':
       await resolve(ui);
+      break;
+    case 'Authentication Token':
+      await generateToken(ui);
       break;
     case '<Exit>':
       process.exit(0);
