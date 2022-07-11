@@ -6,7 +6,7 @@
 		"start": "node --experimental-modules --experimental-json-modules src/main.js"
 	},
 	"dependencies": {
-		"@lacchain/did": "^1.4.2",
+		"@lacchain/did": "^1.4.6",
 		"@mattrglobal/jsonld-signatures-bbs": "0.10.0",
 		"DIDComm-js": "git+https://github.com/decentralized-identity/DIDComm-js.git",
 		"ansi-escapes": "^5.0.0",

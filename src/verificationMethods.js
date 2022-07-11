@@ -1,3 +1,4 @@
+import fs from "fs";
 import inquirer from "inquirer"
 import { get, set } from "./storage.js";
 import view from "./view.js";
@@ -137,7 +138,7 @@ export async function createVM( ui, did ) {
   }, {
     type: 'input',
     name: 'privateKey',
-    message: 'Enter Private Key (Optional)',
+    message: 'Enter Private Key (or path to .pem)',
     when(answers) {
       return answers.providePK;
     }
@@ -209,6 +210,9 @@ export async function createVM( ui, did ) {
    Public Key: ${generated.publicKey}
    Private Key: ${generated.privateKey}
    Encoding: ${generated.encoding}`);
+  } else if( vm.encoding === 'pem' ) {
+    vm.publicKey = fs.readFileSync( vm.publicKey ).toString();
+    vm.privateKey = fs.readFileSync( vm.privateKey ).toString();
   }
 
   const storedDID = await get( did.id );

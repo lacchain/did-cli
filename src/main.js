@@ -25,9 +25,9 @@ export const main = async () => inquirer.prompt( [{
     new inquirer.Separator(),
     'Authentication Token',
     new inquirer.Separator(),
-    '<Exit>',
-    new inquirer.Separator(),
+    'Exit'
   ],
+  loop: false
 }] ).then( async ( { option } ) => {
   switch( option ) {
     case 'List (View all DIDs)':
@@ -42,7 +42,7 @@ export const main = async () => inquirer.prompt( [{
     case 'Authentication Token':
       await generateToken(ui);
       break;
-    case '<Exit>':
+    case 'Exit':
       process.exit(0);
       break;
   }
