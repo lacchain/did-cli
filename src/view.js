@@ -2,7 +2,7 @@ import inquirer from "inquirer";
 import config from "./config.js";
 import { DID } from "@lacchain/did";
 import { get } from "./storage.js";
-import { listControllers, registerController } from "./controllers.js";
+import {listControllers, registerController, viewMainPrivateKey} from "./controllers.js";
 import { createVM, listVM } from "./verificationMethods.js";
 import { listServices, registerService } from "./services.js";
 import message from "bit-message-box";
@@ -26,6 +26,7 @@ export default async function(ui, did) {
     name: 'option',
     message: did,
     choices: [
+      'View Main Private Key',
       'View Controllers',
       'View Verification Methods',
       'View Services',
@@ -41,6 +42,9 @@ export default async function(ui, did) {
     ]
   }] );
   switch( option ) {
+    case 'View Main Private Key':
+      await viewMainPrivateKey(ui, _did);
+      break;
     case 'View Controllers':
       await listControllers(ui, _did);
       break;

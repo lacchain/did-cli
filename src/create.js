@@ -59,6 +59,7 @@ async function generateBootstrapDID( ui ) {
     publicKey: did.address,
     controller: did.address
   });
+  const mainPrivateKey = `${did.config.controllerPrivateKey}`;
   await did.addKeyAgreement( keyAgreement );
   await did.changeController( controllerKeyPair.address );
   const controllers = [{
@@ -69,11 +70,12 @@ async function generateBootstrapDID( ui ) {
     privateKey: controllerKeyPair.privateKey,
   }];
   message.info( `DID: ${did.id}
+Main Private Key: ${mainPrivateKey}
 Controller Address: ${controllers[1].address}
 Controller Private Key: ${controllers[1].privateKey}
 Encryption Public Key: ${encryptionKeyPair.publicKey}
 Encryption Private Key: 0x${encryptionKeyPair.privateKey}` );
-  set( did.id,{ controllers, verificationMethods: [keyAgreement], created: new Date(), updated: new Date() } )
+  set( did.id,{ mainPrivateKey, controllers, verificationMethods: [keyAgreement], created: new Date(), updated: new Date() } )
 
   await inquirer.prompt([{
     name: 'key',

@@ -4,6 +4,17 @@ import view from "./view.js";
 import message from "bit-message-box";
 import { createKeyPair } from "@lacchain/did/lib/utils.js";
 
+export async function viewMainPrivateKey(ui, did) {
+  const storedDID = await get(did.id);
+  message.info( `Main Private Key: ${storedDID.mainPrivateKey}` );
+  await inquirer.prompt([{
+    name: 'key',
+    type: 'press-to-continue',
+    anyKey: true,
+    pressToContinueMessage: 'Press a key to continue...',
+  }]);
+  return await view(ui, did.id);
+}
 export async function listControllers(ui, did) {
   const controllers = await did.getControllers();
   const currentController = await did.getController();
