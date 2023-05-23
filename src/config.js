@@ -1,15 +1,13 @@
-export default {
+/*export default {
   network: 'main',
   rpcUrl: 'https://writer.lacchain.net',
   registry: '0xCC77A5e709cB473F49c943D9b40B989f986E5F2F',
-};
+};*/
 
-/*
 export default {
-  network: 'main',
-  registry: '0xB9D96a0bDd52FE48fC504d0BB28AF51091275C81',
-  nodeAddress: '0xd00e6624a73f88b39f82ab34e8bf2b4d226fd768',
+  network: 'openprotest',
+  registry: '0xAB00e74C1b0A2313f552E869E6d55B5CdA31aFfe',
+  nodeAddress: '0xad730de8c4bfc3d845f7ce851bcf2ea17c049585',
   expiration: 1736394529,
-  rpcUrl: 'http://34.69.22.82'
+  rpcUrl: 'http://35.185.112.219'
 };
-*/

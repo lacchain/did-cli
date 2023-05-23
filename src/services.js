@@ -65,7 +65,29 @@ Endpoint: ${selectedService.serviceEndpoint}` );
 }
 
 export async function registerService( ui, did ) {
- c
+  const { type, endpoint } = await inquirer.prompt( [{
+    type: 'input',
+    name: 'type',
+    message: 'Type',
+  }, {
+    type: 'input',
+    name: 'endpoint',
+    message: 'Endpoint',
+  }] );
+
+  const tx = await did.addService( {
+    type,
+    endpoint
+  } );
+
+  message.info( `Tx Hash: ${tx.transactionHash}` );
+
+  await inquirer.prompt([{
+    name: 'key',
+    type: 'press-to-continue',
+    anyKey: true,
+    pressToContinueMessage: 'Press a key to continue...',
+  }]);
 
   await listServices( ui, did );
 }

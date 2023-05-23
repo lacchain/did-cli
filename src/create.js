@@ -53,6 +53,12 @@ async function generateBootstrapDID( ui ) {
     privateKey: encryptionKeyPair.privateKey,
     controller: did.address,
   };
+  await did.addAuthenticationMethod( {
+    algorithm: 'esecp256k1vk',
+    encoding: 'blockchain',
+    publicKey: did.address,
+    controller: did.address
+  });
   await did.addKeyAgreement( keyAgreement );
   await did.changeController( controllerKeyPair.address );
   const controllers = [{
